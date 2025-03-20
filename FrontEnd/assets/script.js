@@ -8,30 +8,6 @@
  * constante start pour récupérer les travaux lorsque le DOM est chargé
  */
 
-// const start = () => {
-    // let works = fetch("http://localhost:5678/api/works")
-    // .then(response => response.json())
-    // .then(data => {
-    //     // console.log("dans start data :")
-    //     // console.log(data)
-    //     let gallery = ""
-    //     for (let figure of data){
-    //         gallery += `
-    //             <figure>
-    //                 <img src="${figure.imageUrl}" alt="${figure.title}">
-    //                 <figcaption>${figure.title}</figcaption>
-    //             </figure>
-    //         `
-    //     }
-    // document.querySelector(".gallery").insertAdjacentHTML('beforeend', gallery)
-    // })
-    // .catch(err => {
-    //     console.log(err)
-    // })
-// }
-
-// window.addEventListener("load",start)
-
 
 /**
  * Ajouter le tri des projets par catégorie dans la galerie :
@@ -51,6 +27,29 @@
  *      f) injecter le tableau dans le DOM
  */
 
+const start = () => {
+    fetch("http://localhost:5678/api/works")
+    .then(response => response.json())
+    .then(data => {
+        let gallery = ""
+        for (let figure of data){
+            gallery += `
+                <figure class="fig_data" data-fig="${figure.category.id}">
+                    <img src="${figure.imageUrl}" alt="${figure.title}">
+                    <figcaption>${figure.title}</figcaption>
+                </figure>
+            `
+        }        
+        document.querySelector(".gallery").insertAdjacentHTML('beforeend', gallery)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
+window.addEventListener("load",start)
+
+
 fetch("http://localhost:5678/api/categories")
     .then(response => response.json())
     .then(data => {
@@ -60,21 +59,24 @@ fetch("http://localhost:5678/api/categories")
             <button class="btn" data-cat="${button.id}">${button.name}</button>
             `
         }
-        console.log("dans btnCategroy :")
-        console.log(btnCategory)
         let btnFilter = document.querySelector(".filter")
         btnFilter.insertAdjacentHTML('beforeend', btnCategory)
-
-        let btn = document.querySelectorAll(".btn")
-        console.log(btn)
-        btn.forEach(btnClick => {
-            btnClick.addEventListener("click", (event) => {
-                console.log("clic sur le bouton")
-                console.log(event.target.dataset.cat)
-                
-            })
         
-        })
+        let btn = document.querySelectorAll(".btn")
+            btn.forEach(btnClick => {            
+                btnClick.addEventListener("click", (event) => {
+                    let figData = document.querySelectorAll(".fig_data")
+                    figData.forEach(item => {
+                        if(item.getAttribute("data-fig") === event.target.dataset.cat) {
+                            item.style.display = "block"
+                        } else {
+                            item.style.display = "none"
+                        }
+                    })
+
+                })
+        
+            })
  
     })
     .catch(err => {
@@ -83,60 +85,3 @@ fetch("http://localhost:5678/api/categories")
     })   
 
 
-
-fetch("http://localhost:5678/api/works")
-    .then(response => response.json())
-    .then(data => {
-        let dataWorks = data
-        console.log("dans dataWorks :")
-        console.log(dataWorks)
-        let gallery = ""
-        for (let figure of data){
-            gallery += `
-                <figure class="${figure.category.id}">
-                    <img src="${figure.imageUrl}" alt="${figure.title}">
-                    <figcaption>${figure.title}</figcaption>
-                </figure>
-            `
-        }
-        console.log("dans gallery :")
-        console.log(gallery)
-        document.querySelector(".gallery").insertAdjacentHTML('beforeend', gallery)
-
-        
-    })
-    .catch(err => {
-        console.log("dans le catch")
-        console.log(err)
-    })   
-       
-            // btnFilter.addEventListener("click", () => {
-            //     console.log("clic sur le bouton")
-            // })
-        
-    // const filter = document.querySelector(".filter")
-    // let category = fetch("http://localhost:5678/api/categories")
-    //     .then(res => res.json())
-    //     .then(data => {
-    //         console.log(data)
-    //         let btnCategory = ""
-    //             for (let button of data){
-    //             btnCategory += `
-    //                  <button id="${button.id}">${button.name}</button>
-    //             `
-    //         }
-    //         document.querySelector(".filter").insertAdjacentHTML('beforeend', btnCategory)
-    //         document.querySelector(".filter").addEventListener("click", () => {
-    //                 console.log("clic sur le bouton")
-    //                 console.log(fetch("http://localhost:5678/api/works")
-    //                     .then(res => res.json())
-    //                     .then(data => {
-    //                         console.log(data)
-    //                     })
-    //                 )                
-    //         })
-    //     })
-    //     .catch(err => {
-    //         console.log("dans le catch")
-    //         console.log(err)
-    //     })   
