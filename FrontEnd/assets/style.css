@@ -34,9 +34,11 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
 body {
 	line-height: 1;
 }
+
 ol, ul {
 	list-style: none;
 }
@@ -57,13 +59,16 @@ body {
 	max-width: 1140px;
 	margin:auto;
 	font-family: 'Work Sans' ;
-	font-size: 14px;
+	font-size: 14px;	
+	background-color: #FFFEF8;
 }
+
 header {
 	display: flex;
 	justify-content: space-between;
 	margin: 50px 0
 }
+
 section {
 	margin: 50px 0
 }
@@ -81,7 +86,6 @@ h1 > span {
 	font-family: 'Work Sans';
 	font-size:10px;
 	letter-spacing: 0.1em;
-;
 }
 
 h2{
@@ -90,6 +94,7 @@ h2{
 	font-size: 30px;
 	color: #1D6154
 }
+
 nav ul {
 	display: flex;
 	align-items: center;
@@ -155,7 +160,7 @@ li:hover {
 
 .btn {
 	border: solid 1px #1D6154;
-	background-color: #FFFFFF;
+	background-color: #FFFEF8;
 	color: #1D6154;
 	font-family: Syne;
 	font-weight: 700;
@@ -213,9 +218,15 @@ input[type="submit"]{
 	border-radius: 60px ;
 }
 
+footer {
+	background-color: #FFFFFF;
+	height: 60px;
+}
+
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
+	align-items: center;
 	margin: 2em;
 }
 
