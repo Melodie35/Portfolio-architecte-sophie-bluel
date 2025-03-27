@@ -1,9 +1,7 @@
-
-
-// soumettre le formulaire
+// soumettre le formulaire et éviter le rechargement de la page par défaut
 document.querySelector("#connexion").addEventListener("submit", (event) => {
     event.preventDefault()
-    //Récupérer les valeurs du formulaire et les convertir en chaîne de caractère
+    //Récupérer les valeurs du formulaire et les convertir en chaîne de caractères
     const login = {
         email: event.target.querySelector("#email").value,
         password: event.target.querySelector("#password").value
@@ -21,12 +19,12 @@ document.querySelector("#connexion").addEventListener("submit", (event) => {
             response.json()
             //Récupérer les données de l'API
             .then ((data) => {
-                // si la réponse est OK
+                // si la réponse est OK (identifiants corrects)
                 if (response.ok) {
                     // stocker le token
-                    localStorage.getItem("token", data.token)
+                    sessionStorage.setItem("token", data.token)
                     // revenir à la page d'accueil
-                    location = "index.html"
+                    location = "index.html"                    
                 // sinon, afficher le message d'erreur
                 } else {
                     document.querySelector("#error-message").style.display = "block"                    
@@ -35,12 +33,9 @@ document.querySelector("#connexion").addEventListener("submit", (event) => {
         })
     
         .catch((err) => {
-            console.log("dans le catch")
             console.log(err)
         })
 
-    console.log(credentials)
-    console.log("formulaire soumis")
 })
 
         

@@ -175,12 +175,13 @@ input[type="submit"]{
 #error-message {
 	display: none;
 	color: red;
-	margin-bottom: 30px;
+	margin-bottom: 10px;
 }
 
 footer {
 	background-color: #FFFFFF;
-	height: 60px;
+	padding: 3px 0px;
+	margin-top: 20px;
 }
 
 footer nav ul {
@@ -188,5 +189,6 @@ footer nav ul {
 	justify-content: flex-end;
 	align-items: center;
 	margin: 2em;
+	
 }
 

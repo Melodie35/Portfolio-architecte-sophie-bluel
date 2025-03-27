@@ -46,6 +46,8 @@ window.addEventListener("load", start)
  *         ii) sinon, si la catégorie du bouton = la catégorie des travaux, les afficher et cacher les autres
  */
 
+const btnFilter = document.querySelector(".filter")
+
 fetch("http://localhost:5678/api/categories")
     .then((response) => response.json())
     .then((data) => {
@@ -58,7 +60,6 @@ fetch("http://localhost:5678/api/categories")
                 <button class="btn" data-cat="${button.id}">${button.name}</button>
                 `
         }
-        let btnFilter = document.querySelector(".filter")
         btnFilter.insertAdjacentHTML("beforeend", btnTous + btnCategory)
 
         let btn = document.querySelectorAll(".btn")
@@ -83,3 +84,19 @@ fetch("http://localhost:5678/api/categories")
         console.log(err)
     })
 
+
+/** Page d'accueil après connexion
+ * 1) Récupérer le token
+ * 2) si token ok, afficher le bandeau noir "Mode édition"
+ * 3) Afficher logout au lieu de login dans le menu
+ * 4) Suppression des boutons filtres
+ * 5) Ajout du bouton "modifier"
+*/
+let token = sessionStorage.getItem("token")
+console.log(token)
+if (token != null) {
+    document.querySelector("#mode-edition").style.display = "flex"
+    document.querySelector("#nav-login").textContent = "logout"
+    btnFilter.style.display = "none"
+    document.querySelector("#modifier").style.display = "inline-flex"
+}
