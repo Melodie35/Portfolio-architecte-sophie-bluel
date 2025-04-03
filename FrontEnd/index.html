@@ -45,9 +45,9 @@
 		<h2>Mes Projets 
 			<span id="modifier">
 			<i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
-			<p>modifier</p></span>
-		</h2>
-			
+			<a href="#modal-gallery" class="js-modal">modifier</a>
+			</span>
+		</h2>			
 		<div class = "filter">
 		</div>
 		<div class="gallery">
@@ -66,6 +66,52 @@
 			<input type="submit" value="Envoyer">
 		</form>
 	</section>
+
+	<aside id="modal-gallery" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-modal-gallery" style="display: none;">
+		<div class="modal-wrapper js-modal-stop">
+			<section class="header-modal">
+				<i class="fa-solid fa-arrow-left" id="js-arrow-left" aria-hidden="true" style="display: none;"></i>
+				<i class="fa-solid fa-xmark js-xmark" aria-hidden="true"></i>
+			</section>
+			<section id="gallery-photo">
+				<h2 id="title-modal-gallery">Galerie photo</h2>
+				<figure id = "gallery-modal">
+				</figure>				
+				<button id="add-a-photo" class="btn-modal">Ajouter une photo</button>
+			</section>
+			<section id="add-photo" style="display: none;">
+				<h2 id="title-modal-add-photo">Ajout photo</h2>
+				<input type="submit" value="+ Ajouter photo">
+				<form id="form-add-photo">
+					<label for="title">Titre</label>
+					<input type="text" name="title" id="title">
+					<label for="category">Catégorie</label>
+					<input type="checkbox" name="category" id="category">			
+					<input type="submit" value="Valider">
+				</form>
+			</section>
+		</div>
+	</aside>
+
+	<!-- <aside id="modal-add-photo" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-modal-add-photo" style="display: none;">
+		<div class="modal-wrapper js-modal-stop">
+			<section class="header-modal">
+				<i class="fa-solid fa-arrow-left" id="js-arrow-left" aria-hidden="true"></i>
+				<i class="fa-solid fa-xmark js-xmark" aria-hidden="true"></i>
+			</section>
+			<section id="add-photo">
+				<h2 id="title-modal-add-photo">Ajout photo</h2>
+				<input type="submit" value="+ Ajouter photo">
+				<form id="form-add-photo">
+					<label for="title">Titre</label>
+					<input type="text" name="title" id="title">
+					<label for="category">Catégorie</label>
+					<input type="checkbox" name="category" id="category">			
+					<input type="submit" value="Valider">
+				</form>
+			</section>
+		</div>
+	</aside> -->
 </main>
 
 <footer>
@@ -76,5 +122,6 @@
 	</nav>
 </footer>
 <script src="./assets/script.js"></script>
+<script src="./assets/modal.js"></script>
 </body>
 </html>
