@@ -209,6 +209,7 @@ li:hover {
 #contact h2{
 	margin-bottom: 20px;
 }
+
 #contact form {
 	text-align: left;
 	margin-top:30px;
@@ -267,7 +268,6 @@ footer nav ul {
 }
 
 .modal-wrapper {
-	overflow: auto;
 	width: 630px;
 	height: 60%;
 	max-width: calc(100vw-20px);
@@ -281,27 +281,52 @@ footer nav ul {
 	margin: 10px;
 }
 
+.header-modal {
+	display: flex;
+	justify-content: space-between;
+	padding-bottom: 20px;
+}
+
 .modal h2{
 	font-family: Work Sans;
 	size: 26px;
 	font-weight: 400;
 	color: #000000;
 	text-align: center;
-	margin-bottom: 50px;
 }
 
-.modal figure {
-	width: 80%;
+#gallery-photo {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	height: 90%;
+}
+
+#gallery-modal {
+	width: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
-	align-items: center;
-	border-bottom: solid 1px #B3B3B3;
-	margin: 0px 10px 50px 10px;
-	padding: 50px 0px;
-
 }
+
+#gallery-modal img {
+	width: 100%;
+}
+
+.btn-modal {
+	border: solid 1px #1D6154;
+	background-color: #1D6154;
+	color: #FFFFFF;
+	font-family: Syne;
+	font-weight: 700;
+	font-size: 16px;
+	border-radius: 60px;
+	padding : 8px 12px;
+	margin : 30px;
+}
+
 
 .modal input[type="submit"]{
 	display: flex;
@@ -314,7 +339,58 @@ footer nav ul {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-.header-modal {
+#add-photo {
 	display: flex;
+	flex-direction: column;
 	justify-content: space-around;
+	align-items: center;
+	height: 90%;
+	margin: auto;
 }
+
+.grey-box {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color:#E8F1F6;
+	width: 80%;
+	height: 40%;
+}
+
+#add-photo .btn-modal {
+	background-color: #CBD6DC;
+	color:#306685;
+	border: none;
+}
+
+#form-add-photo {
+	display: flex;
+	flex-direction: column;
+	text-align: left;
+	margin-top:30px;
+}
+
+#form-add-photo label {
+	margin: 2em 0 1em 0;
+}
+
+.modal input[type="submit"]{
+	background-color: #A7A7A7;
+}
+
+.fig-modal {
+	position: relative;
+}
+
+.fa-trash-can {
+	position: absolute;
+	top: 5%;
+	right: 5%;
+	color: white;
+	background-color: black;
+	padding: 5px;
+}
+
+
+
