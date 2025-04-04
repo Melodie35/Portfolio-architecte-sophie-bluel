@@ -39,20 +39,11 @@ document.querySelector("#add-a-photo").addEventListener("click", (e) => {
         document.querySelector("#gallery-photo").style.display = null
         document.querySelector("#add-photo").style.display = "none"
         document.querySelector("#js-arrow-left").style.display = "none"
-    })
-    const target = document.querySelector(e.target.getAttribute("href"))
-    target.addEventListener("click", (e) => {
-        document.querySelector("#gallery-photo").style.display = null
-        document.querySelector("#add-photo").style.display = "none"
-        document.querySelector("#js-arrow-left").style.display = "none"
-    })
-   
+    })   
 })
-
 
 document.querySelector("#js-arrow-left").addEventListener("click", (e) => {
     e.preventDefault()
-    console.log("clic sur la flèche")
     document.querySelector("#gallery-photo").style.display = null
     document.querySelector("#add-photo").style.display = "none"
     document.querySelector("#js-arrow-left").style.display = "none"

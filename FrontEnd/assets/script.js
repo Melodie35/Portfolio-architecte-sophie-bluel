@@ -93,10 +93,23 @@ fetch("http://localhost:5678/api/categories")
  * 5) Ajout du bouton "modifier"
 */
 let token = sessionStorage.getItem("token")
-console.log(token)
 if (token != null) {
     document.querySelector("#mode-edition").style.display = "flex"
     document.querySelector("#nav-login").textContent = "logout"
     btnFilter.style.display = "none"
     document.querySelector("#modifier").style.display = "inline-flex"
 }
+
+/*Déconnexion*/
+document.querySelector("#nav-login").addEventListener("click", (e) => {
+    if (document.querySelector("#nav-login").textContent === "logout"){
+        token = null
+        sessionStorage.clear()
+        localStorage.clear()
+        e.preventDefault()
+        document.querySelector("#mode-edition").style.display = "none"
+        document.querySelector("#nav-login").textContent = "login"
+        btnFilter.style.display = null
+        document.querySelector("#modifier").style.display = "none"
+    }
+})
