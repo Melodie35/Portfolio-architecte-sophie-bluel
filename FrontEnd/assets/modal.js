@@ -32,23 +32,48 @@ const stopPropagation = (e) => {
 }
 
  //Charger la gallerie dans 1ère modale
- fetch("http://localhost:5678/api/works")
- .then((response) => response.json())
- .then((data) => {
-     let gallery = ""
-     for (let figure of data) {
-         gallery += `
-             <figure class="fig-modal" data-fig="${figure.category.id}">
-                 <i class="fa-solid fa-trash-can"></i>
-                 <img src="${figure.imageUrl}" alt="${figure.title}">                        
-             </figure>
-         `
-     }
-     document.querySelector("#gallery-modal").insertAdjacentHTML("beforeend", gallery)
- })
- .catch((err) => {
-     console.log(err)
- })
+fetch("http://localhost:5678/api/works")
+    .then((response) => response.json())
+    .then((data) => {
+        let gallery = ""
+        for (let figure of data) {
+            gallery += `
+                <figure class="fig-modal" data-id="${figure.id}" data-fig="${figure.category.id}">
+                    <i class="fa-solid fa-trash-can js-trash-can" data-id="${figure.id}"></i>
+                    <img src="${figure.imageUrl}" alt="alibi ${figure.title}">                        
+                </figure>
+            `
+        }
+        document.querySelector("#gallery-modal").insertAdjacentHTML("beforeend", gallery)
+
+        //Supprimer l'image après le clic sur la poubelle
+        let trashBtns = document.querySelectorAll(".js-trash-can")
+        trashBtns.forEach((trashBtn) => {
+            trashBtn.addEventListener("click", (e) => {
+                console.log("clic sur la poubelle")
+                console.log(e.target.dataset.id)
+                fetch(`http://localhost:5678/api/works/${e.target.dataset.id}`, {
+                    method: "DELETE",
+                    headers: {                        
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                })
+                .then(response => {
+                    console.log(response)
+                })
+        // // Récupérer la réponse de l'API en format JSON
+        // .then((response) => {
+        //     response.json()
+            })
+        })
+    })
+
+    .catch((err) => {
+        console.log(err)
+    })
+
+ 
 
 //Passer à la 2nde modale après avoir cliqué sur Ajouter une photo
 document.querySelector("#add-a-photo").addEventListener("click", (e) => {
