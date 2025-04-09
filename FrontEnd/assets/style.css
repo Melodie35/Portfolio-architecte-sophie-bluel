@@ -348,6 +348,23 @@ footer nav ul {
 	margin: auto;
 }
 
+.modal input[type="submit"]{
+	background-color: #A7A7A7;
+}
+
+.fig-modal {
+	position: relative;
+}
+
+.fa-trash-can {
+	position: absolute;
+	top: 5%;
+	right: 5%;
+	color: white;
+	background-color: black;
+	padding: 5px;
+}
+
 .grey-box {
 	display: flex;
 	flex-direction: column;
@@ -375,22 +392,6 @@ footer nav ul {
 	margin: 2em 0 1em 0;
 }
 
-.modal input[type="submit"]{
-	background-color: #A7A7A7;
+#plus-add-photo {
+	display: none;
 }
-
-.fig-modal {
-	position: relative;
-}
-
-.fa-trash-can {
-	position: absolute;
-	top: 5%;
-	right: 5%;
-	color: white;
-	background-color: black;
-	padding: 5px;
-}
-
-
-

@@ -40,18 +40,16 @@ fetch("http://localhost:5678/api/works")
             gallery += `
                 <figure class="fig-modal" data-id="${figure.id}" data-fig="${figure.category.id}">
                     <i class="fa-solid fa-trash-can js-trash-can" data-id="${figure.id}"></i>
-                    <img src="${figure.imageUrl}" alt="alibi ${figure.title}">                        
+                    <img src="${figure.imageUrl}" alt="${figure.title}">                        
                 </figure>
             `
         }
         document.querySelector("#gallery-modal").insertAdjacentHTML("beforeend", gallery)
-
+       
         //Supprimer l'image après le clic sur la poubelle
         let trashBtns = document.querySelectorAll(".js-trash-can")
         trashBtns.forEach((trashBtn) => {
             trashBtn.addEventListener("click", (e) => {
-                console.log("clic sur la poubelle")
-                console.log(e.target.dataset.id)
                 fetch(`http://localhost:5678/api/works/${e.target.dataset.id}`, {
                     method: "DELETE",
                     headers: {                        
@@ -60,11 +58,25 @@ fetch("http://localhost:5678/api/works")
                     },
                 })
                 .then(response => {
-                    console.log(response)
+                    if(response.ok){
+                        let figModals=document.querySelectorAll(".fig-modal")
+                        figModals.forEach((item) => {
+                            if (item.dataset.id === e.target.dataset.id) {
+                                item.remove()
+                            }
+                        })
+                        let figData=document.querySelectorAll(".fig-data")
+                        figData.forEach((item) => {
+                            if (item.dataset.id === e.target.dataset.id) {
+                                item.remove()
+                            }
+                        })                                  
+                    }                    
                 })
-        // // Récupérer la réponse de l'API en format JSON
-        // .then((response) => {
-        //     response.json()
+
+                .catch((error) => {
+                    console.log(error)
+                })
             })
         })
     })
@@ -118,3 +130,16 @@ fetch("http://localhost:5678/api/categories")
     }
     document.querySelector("#category").insertAdjacentHTML("beforeend", blankOption+optionCategory)
 })
+
+//Voir le preview d'une photo chargée dans la 2e modale
+const input = document.querySelector("#plus-add-photo");
+const preview = document.querySelector("#preview");
+
+input.addEventListener("change", (e) => {
+    console.log(e)
+    console.log(input.files.length)
+    // if (input.files.length > 0) {
+
+    // }
+})
+
