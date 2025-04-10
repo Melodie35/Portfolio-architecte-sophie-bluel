@@ -132,14 +132,24 @@ fetch("http://localhost:5678/api/categories")
 })
 
 //Voir le preview d'une photo chargée dans la 2e modale
-const input = document.querySelector("#plus-add-photo");
-const preview = document.querySelector("#preview");
+const input = document.querySelector("#plus-add-photo")
 
-input.addEventListener("change", (e) => {
-    console.log(e)
-    console.log(input.files.length)
-    // if (input.files.length > 0) {
+input.style.opacity = 0
 
-    // }
+input.addEventListener("change", (event) => {
+    const file = event.target.files[0]
+    const preview = document.querySelector("#preview")
+    const reader = new FileReader()
+
+    reader.onload = function(e) {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.alt = "Aperçu de l’image"
+      img.style.maxWidth = "50%"
+      img.style.maxHeight = "100%"
+
+      preview.replaceChildren(img)
+    }
+
+    reader.readAsDataURL(file)
 })
-

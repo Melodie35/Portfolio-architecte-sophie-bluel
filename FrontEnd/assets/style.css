@@ -366,13 +366,22 @@ footer nav ul {
 }
 
 .grey-box {
+	/* display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center; */
+	background-color:#E8F1F6;
+	width: 80%;
+	height: 40%;
+	position: relative;
+}
+
+#preview {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	background-color:#E8F1F6;
-	width: 80%;
-	height: 40%;
+	height: 100%;
 }
 
 #add-photo .btn-modal {
@@ -392,6 +401,4 @@ footer nav ul {
 	margin: 2em 0 1em 0;
 }
 
-#plus-add-photo {
-	display: none;
-}
+
