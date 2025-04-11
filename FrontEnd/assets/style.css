@@ -304,6 +304,7 @@ footer nav ul {
 }
 
 #gallery-modal {
+	overflow: auto;
 	width: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -311,7 +312,7 @@ footer nav ul {
 	grid-row-gap: 20px;
 }
 
-#gallery-modal img {
+#gallery-modal img {	
 	width: 100%;
 }
 
@@ -352,7 +353,7 @@ footer nav ul {
 	background-color: #A7A7A7;
 }
 
-.fig-modal {
+.fig-data {
 	position: relative;
 }
 
@@ -371,7 +372,7 @@ footer nav ul {
 	justify-content: center;
 	align-items: center; */
 	background-color:#E8F1F6;
-	width: 80%;
+	width: 100%;
 	height: 40%;
 	position: relative;
 }
@@ -384,6 +385,10 @@ footer nav ul {
 	height: 100%;
 }
 
+#preview {
+	position: relative;
+}
+
 #add-photo .btn-modal {
 	background-color: #CBD6DC;
 	color:#306685;
@@ -393,12 +398,26 @@ footer nav ul {
 #form-add-photo {
 	display: flex;
 	flex-direction: column;
-	text-align: left;
-	margin-top:30px;
+	text-align: center;
+	width: 80%;
+	height: 90%;
 }
 
 #form-add-photo label {
 	margin: 2em 0 1em 0;
+	text-align: left;
+}
+
+#error-message {
+	color: red;
+	font-weight: bold;
+	align-self: center;
+}
+
+#confirmation {
+	color: green;
+	font-weight: bold;
+	align-self: center;
 }
 
 

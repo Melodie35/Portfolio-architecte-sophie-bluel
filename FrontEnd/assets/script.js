@@ -15,7 +15,7 @@ const start = () => {
             let gallery = ""
             for (let figure of data) {
                 gallery += `
-                    <figure class="fig-data" data-id="${figure.id}" data-fig="${figure.category.id}">
+                    <figure class="fig-data" data-id="${figure.id}" data-fig="${figure.categoryId}">
                         <img src="${figure.imageUrl}" alt="${figure.title}">
                         <figcaption>${figure.title}</figcaption>
                     </figure>

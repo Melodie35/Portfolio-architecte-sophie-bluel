@@ -38,7 +38,7 @@ fetch("http://localhost:5678/api/works")
         let gallery = ""
         for (let figure of data) {
             gallery += `
-                <figure class="fig-modal" data-id="${figure.id}" data-fig="${figure.category.id}">
+                <figure class="fig-data" data-id="${figure.id}" data-fig="${figure.categoryId}">
                     <i class="fa-solid fa-trash-can js-trash-can" data-id="${figure.id}"></i>
                     <img src="${figure.imageUrl}" alt="${figure.title}">                        
                 </figure>
@@ -59,18 +59,12 @@ fetch("http://localhost:5678/api/works")
                 })
                 .then(response => {
                     if(response.ok){
-                        let figModals=document.querySelectorAll(".fig-modal")
+                        let figModals=document.querySelectorAll(".fig-data")
                         figModals.forEach((item) => {
                             if (item.dataset.id === e.target.dataset.id) {
                                 item.remove()
                             }
-                        })
-                        let figData=document.querySelectorAll(".fig-data")
-                        figData.forEach((item) => {
-                            if (item.dataset.id === e.target.dataset.id) {
-                                item.remove()
-                            }
-                        })                                  
+                        })                                                       
                     }                    
                 })
 
@@ -125,7 +119,7 @@ fetch("http://localhost:5678/api/categories")
     let optionCategory = ""
     for (let option of data) {
         optionCategory += `
-            <option value="${option.name}">${option.name}</option>
+            <option value="${option.id}">${option.name}</option>
         `
     }
     document.querySelector("#category").insertAdjacentHTML("beforeend", blankOption+optionCategory)
@@ -133,23 +127,116 @@ fetch("http://localhost:5678/api/categories")
 
 //Voir le preview d'une photo chargée dans la 2e modale
 const input = document.querySelector("#plus-add-photo")
+const preview = document.querySelector("#preview")
 
 input.style.opacity = 0
+input.style.position = "relative"
 
 input.addEventListener("change", (event) => {
     const file = event.target.files[0]
-    const preview = document.querySelector("#preview")
     const reader = new FileReader()
 
     reader.onload = function(e) {
-      const img = document.createElement('img');
-      img.src = e.target.result;
+      const img = document.createElement("img")
+      img.id = "img-preview"
+      img.src = e.target.result
       img.alt = "Aperçu de l’image"
+      img.style.position = "absolute"
       img.style.maxWidth = "50%"
       img.style.maxHeight = "100%"
-
-      preview.replaceChildren(img)
+      preview.insertAdjacentElement("beforeend", img)
     }
 
     reader.readAsDataURL(file)
 })
+
+
+// soumettre le formulaire de la 2nde modale une fois rempli
+const formPhoto = document.querySelector("#form-add-photo")
+const imageForm = document.querySelector("#plus-add-photo")
+const titleForm = document.querySelector("#title")
+const categoryForm = document.querySelector("#category")
+const btnValider = document.querySelector("#btn-valider")
+
+const fieldsCheck = () => {
+    const fieldsOK = imageForm.files.length > 0 && titleForm.value.trim() !== "" && categoryForm.value !== "blank"
+    btnValider.style.background = fieldsOK ? "#1D6154" : "#A7A7A7"
+}
+
+formPhoto.addEventListener("input", fieldsCheck)
+
+
+
+
+
+
+formPhoto.addEventListener("submit", (event) => {
+    event.preventDefault()
+
+    console.log(categoryForm.value)
+
+    const image = event.target.querySelector("#plus-add-photo").files[0]
+    const title = event.target.querySelector("#title").value
+    const category = event.target.querySelector("#category").value
+    
+
+    const imgPreview = preview.querySelector("img")
+    const errorMessage = document.querySelector("#error-message")
+    const confirmation = document.querySelector("#confirmation")
+    errorMessage.style.display = "none"
+    
+    
+
+    if (!image || !title || category === "blank") {
+        errorMessage.style.display = "block"
+    } 
+    
+    else {
+        btnValider.style.background = "#1D6154"
+        console.log("forumlaire validé")
+        const formData = new FormData()
+        formData.append("image", image)
+        formData.append("title", title)
+        formData.append("category", category)
+        
+    
+        fetch("http://localhost:5678/api/works", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`
+             },
+            body: formData
+        })
+            .then((response) => {
+                response.json()
+                .then ((data) => {
+                    if(response.ok) {
+                        let gallery = `
+                            <figure class="fig-data" data-id="${data.id}" data-fig="${data.categoryId}">
+                                <i class="fa-solid fa-trash-can js-trash-can" data-id="${data.id}"></i>
+                                <img src="${data.imageUrl}" alt="${data.title}">                        
+                            </figure>
+                        `                        
+                        document.querySelector("#gallery-modal").insertAdjacentHTML("beforeend", gallery)
+                        document.querySelector(".gallery").insertAdjacentHTML("beforeend", gallery)
+
+                        confirmation.style.display = "block"
+                        setTimeout(() => confirmation.style.display = "none", 1500)
+                        formPhoto.reset()
+                        imgPreview.src = ""
+                        imgPreview.style.display = "none"
+                        btnValider.style.background = "#A7A7A7"                        
+                    }
+                    
+
+                    })
+                
+            })
+            
+    
+    }
+
+
+   
+})
+
