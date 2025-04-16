@@ -128,11 +128,15 @@ fetch("http://localhost:5678/api/categories")
 //Voir le preview d'une photo chargée dans la 2e modale
 const input = document.querySelector("#plus-add-photo")
 const preview = document.querySelector("#preview")
+const btnAddPhoto = document.querySelector("#btn-add-photo")
 
+    //Cacher l'input
 input.style.opacity = 0
 input.style.position = "relative"
 
-input.addEventListener("change", (event) => {
+input.addEventListener("change", (event) => {      
+    btnAddPhoto.style.display = "none"
+    
     const file = event.target.files[0]
     const reader = new FileReader()
 
@@ -165,40 +169,28 @@ const fieldsCheck = () => {
 
 formPhoto.addEventListener("input", fieldsCheck)
 
-
-
-
-
-
 formPhoto.addEventListener("submit", (event) => {
     event.preventDefault()
-
-    console.log(categoryForm.value)
 
     const image = event.target.querySelector("#plus-add-photo").files[0]
     const title = event.target.querySelector("#title").value
     const category = event.target.querySelector("#category").value
-    
 
     const imgPreview = preview.querySelector("img")
     const errorMessage = document.querySelector("#error-message")
-    const confirmation = document.querySelector("#confirmation")
     errorMessage.style.display = "none"
     
-    
-
     if (!image || !title || category === "blank") {
         errorMessage.style.display = "block"
     } 
     
     else {
+        errorMessage.style.display = "none"
         btnValider.style.background = "#1D6154"
-        console.log("forumlaire validé")
         const formData = new FormData()
         formData.append("image", image)
         formData.append("title", title)
-        formData.append("category", category)
-        
+        formData.append("category", category)        
     
         fetch("http://localhost:5678/api/works", {
             method: "POST",
@@ -211,32 +203,29 @@ formPhoto.addEventListener("submit", (event) => {
                 response.json()
                 .then ((data) => {
                     if(response.ok) {
-                        let gallery = `
+                        let galleryModal = `
                             <figure class="fig-data" data-id="${data.id}" data-fig="${data.categoryId}">
                                 <i class="fa-solid fa-trash-can js-trash-can" data-id="${data.id}"></i>
                                 <img src="${data.imageUrl}" alt="${data.title}">                        
                             </figure>
-                        `                        
-                        document.querySelector("#gallery-modal").insertAdjacentHTML("beforeend", gallery)
+                        `
+                        let gallery = `
+                            <figure class="fig-data" data-id="${data.id}" data-fig="${data.categoryId}">
+                                <img src="${data.imageUrl}" alt="${data.title}">                        
+                            </figure>
+                        `
+                    
+                        document.querySelector("#gallery-modal").insertAdjacentHTML("beforeend", galleryModal)
                         document.querySelector(".gallery").insertAdjacentHTML("beforeend", gallery)
 
-                        confirmation.style.display = "block"
-                        setTimeout(() => confirmation.style.display = "none", 1500)
                         formPhoto.reset()
                         imgPreview.src = ""
                         imgPreview.style.display = "none"
+                        btnAddPhoto.style.display = null
                         btnValider.style.background = "#A7A7A7"                        
                     }
-                    
-
-                    })
-                
+                })
             })
-            
-    
     }
-
-
-   
 })
 
