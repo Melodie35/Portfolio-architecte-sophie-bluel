@@ -1,4 +1,4 @@
-//Fonction pour ouvrir la 1ère modale
+//Ouvrir la modale
 document.querySelector("#modifier").addEventListener("click", (e) => {
     e.preventDefault()
     const target = document.querySelector(e.target.getAttribute("href"))
@@ -11,8 +11,7 @@ document.querySelector("#modifier").addEventListener("click", (e) => {
     modal.querySelector(".js-xmark").addEventListener("click", closeModal)
     modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation)
 })
-    
-
+   
 //Fonction pour fermer la modale
 const closeModal = (e) => {
     if (modal === null) return
@@ -20,6 +19,10 @@ const closeModal = (e) => {
     modal.style.display = "none"
     modal.setAttribute("aria-hidden", "true")
     modal.removeAttribute("aria-modal")
+    document.querySelector("#gallery-photo").style.display = null
+    document.querySelector("#add-photo").style.display = "none"
+    document.querySelector("#js-arrow-left").style.color = "white"
+    resetForm()
     modal.removeEventListener("click", closeModal)
     modal.querySelector(".js-xmark").removeEventListener("click", closeModal)
     modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation)
@@ -31,7 +34,38 @@ const stopPropagation = (e) => {
     e.stopPropagation()
 }
 
+//Fonction pour supprimer l'image après le clic sur la poubelle
+const delPhoto = () => {
+    const trashBtns = document.querySelectorAll(".js-trash-can")
+    trashBtns.forEach((trashBtn) => {
+        trashBtn.addEventListener("click", (e) => {
+            fetch(`http://localhost:5678/api/works/${e.target.dataset.id}`, {
+                method: "DELETE",
+                headers: {                        
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+            })
+                .then(response => {
+                    if(response.ok){
+                        let figModals=document.querySelectorAll(".fig-data")
+                        figModals.forEach((item) => {
+                            if (item.dataset.id === e.target.dataset.id) {
+                                item.remove()
+                            }
+                        })                                                       
+                    }                    
+                })
+                .catch((error) => {
+                console.log(error)
+            })
+        })
+    })
+} 
+
  //Charger la gallerie dans 1ère modale
+const galleryModal = document.querySelector("#gallery-modal")
+
 fetch("http://localhost:5678/api/works")
     .then((response) => response.json())
     .then((data) => {
@@ -44,37 +78,9 @@ fetch("http://localhost:5678/api/works")
                 </figure>
             `
         }
-        document.querySelector("#gallery-modal").insertAdjacentHTML("beforeend", gallery)
-       
-        //Supprimer l'image après le clic sur la poubelle
-        let trashBtns = document.querySelectorAll(".js-trash-can")
-        trashBtns.forEach((trashBtn) => {
-            trashBtn.addEventListener("click", (e) => {
-                fetch(`http://localhost:5678/api/works/${e.target.dataset.id}`, {
-                    method: "DELETE",
-                    headers: {                        
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-                })
-                .then(response => {
-                    if(response.ok){
-                        let figModals=document.querySelectorAll(".fig-data")
-                        figModals.forEach((item) => {
-                            if (item.dataset.id === e.target.dataset.id) {
-                                item.remove()
-                            }
-                        })                                                       
-                    }                    
-                })
-
-                .catch((error) => {
-                    console.log(error)
-                })
-            })
-        })
+        galleryModal.insertAdjacentHTML("beforeend", gallery)
+        delPhoto()
     })
-
     .catch((err) => {
         console.log(err)
     })
@@ -87,17 +93,6 @@ document.querySelector("#add-a-photo").addEventListener("click", (e) => {
     document.querySelector("#gallery-photo").style.display = "none"
     document.querySelector("#add-photo").style.display = null
     document.querySelector("#js-arrow-left").style.color = "black"
-    //Gérer la fermeture de la 2nde modale
-    document.querySelector("#modal-gallery").addEventListener("click", (e) => {
-        document.querySelector("#gallery-photo").style.display = null
-        document.querySelector("#add-photo").style.display = "none"
-        document.querySelector("#js-arrow-left").style.color = "white"
-    })
-    document.querySelector(".js-xmark").addEventListener("click", (e) => {
-        document.querySelector("#gallery-photo").style.display = null
-        document.querySelector("#add-photo").style.display = "none"
-        document.querySelector("#js-arrow-left").style.color = "white"
-    })    
 })
 
 //Passer à la 1ère modale lorsqu'on clique sur la flèche gauche
@@ -106,33 +101,34 @@ document.querySelector("#js-arrow-left").addEventListener("click", (e) => {
     document.querySelector("#gallery-photo").style.display = null
     document.querySelector("#add-photo").style.display = "none"
     document.querySelector("#js-arrow-left").style.color = "white"
+    resetForm()
 })
 
 
 //Charger les catégories dans la 2nde modale
 fetch("http://localhost:5678/api/categories")
-.then((response) => response.json())
-.then((data) => {
-    const blankOption = `
-        <option value="blank"></option>
-    `
-    let optionCategory = ""
-    for (let option of data) {
-        optionCategory += `
-            <option value="${option.id}">${option.name}</option>
+    .then((response) => response.json())
+    .then((data) => {
+        const blankOption = `
+            <option value="blank"></option>
         `
-    }
-    document.querySelector("#category").insertAdjacentHTML("beforeend", blankOption+optionCategory)
-})
+        let optionCategory = ""
+        for (let option of data) {
+            optionCategory += `
+                <option value="${option.id}">${option.name}</option>
+            `
+        }
+        document.querySelector("#category").insertAdjacentHTML("beforeend", blankOption+optionCategory)
+    })
+    .catch((err) => {
+        console.log(err)
+    })
 
 //Voir le preview d'une photo chargée dans la 2e modale
 const input = document.querySelector("#plus-add-photo")
 const preview = document.querySelector("#preview")
 const btnAddPhoto = document.querySelector("#btn-add-photo")
-
-    //Cacher l'input
-input.style.opacity = 0
-input.style.position = "relative"
+let imgPreview = null
 
 input.addEventListener("change", (event) => {      
     btnAddPhoto.style.display = "none"
@@ -140,35 +136,49 @@ input.addEventListener("change", (event) => {
     const file = event.target.files[0]
     const reader = new FileReader()
 
-    reader.onload = function(e) {
-      const img = document.createElement("img")
-      img.id = "img-preview"
-      img.src = e.target.result
-      img.alt = "Aperçu de l’image"
-      img.style.position = "absolute"
-      img.style.maxWidth = "50%"
-      img.style.maxHeight = "100%"
-      preview.insertAdjacentElement("beforeend", img)
+    reader.onload = (e) => {
+      imgPreview = document.createElement("img")
+      imgPreview.id = "img-preview"
+      imgPreview.src = e.target.result
+      imgPreview.alt = "Aperçu de l’image"
+      imgPreview.style.position = "absolute"
+      imgPreview.style.maxWidth = "50%"
+      imgPreview.style.maxHeight = "100%"
+      preview.insertAdjacentElement("beforeend", imgPreview)
     }
 
     reader.readAsDataURL(file)
 })
 
-
-// soumettre le formulaire de la 2nde modale une fois rempli
+//Création de constante liée au formulaire
 const formPhoto = document.querySelector("#form-add-photo")
 const imageForm = document.querySelector("#plus-add-photo")
 const titleForm = document.querySelector("#title")
 const categoryForm = document.querySelector("#category")
 const btnValider = document.querySelector("#btn-valider")
 
+//Fonction pour valider les champs du formulaire
 const fieldsCheck = () => {
     const fieldsOK = imageForm.files.length > 0 && titleForm.value.trim() !== "" && categoryForm.value !== "blank"
     btnValider.style.background = fieldsOK ? "#1D6154" : "#A7A7A7"
+    formPhoto.addEventListener("input", fieldsCheck)
 }
+fieldsCheck()
 
-formPhoto.addEventListener("input", fieldsCheck)
+//Fonction pour vider les champs du formulaire
+const resetForm = () => {
+    formPhoto.reset()
+    btnAddPhoto.style.display = null
+    if (imgPreview) {
+        imgPreview.remove()
+        imgPreview = null
+        input.value = ""
+        
+    }
+}
+resetForm()
 
+// Soumettre le formulaire de la 2nde modale une fois rempli
 formPhoto.addEventListener("submit", (event) => {
     event.preventDefault()
 
@@ -176,7 +186,7 @@ formPhoto.addEventListener("submit", (event) => {
     const title = event.target.querySelector("#title").value
     const category = event.target.querySelector("#category").value
 
-    const imgPreview = preview.querySelector("img")
+    // const imgPreview = preview.querySelector("img")
     const errorMessage = document.querySelector("#error-message")
     errorMessage.style.display = "none"
     
@@ -203,7 +213,7 @@ formPhoto.addEventListener("submit", (event) => {
                 response.json()
                 .then ((data) => {
                     if(response.ok) {
-                        let galleryModal = `
+                        let galleryM = `
                             <figure class="fig-data" data-id="${data.id}" data-fig="${data.categoryId}">
                                 <i class="fa-solid fa-trash-can js-trash-can" data-id="${data.id}"></i>
                                 <img src="${data.imageUrl}" alt="${data.title}">                        
@@ -211,18 +221,17 @@ formPhoto.addEventListener("submit", (event) => {
                         `
                         let gallery = `
                             <figure class="fig-data" data-id="${data.id}" data-fig="${data.categoryId}">
-                                <img src="${data.imageUrl}" alt="${data.title}">                        
+                                <img src="${data.imageUrl}" alt="${data.title}">
+                                <figcaption>${data.title}</figcaption>                        
                             </figure>
                         `
                     
-                        document.querySelector("#gallery-modal").insertAdjacentHTML("beforeend", galleryModal)
+                        galleryModal.insertAdjacentHTML("beforeend", galleryM)
                         document.querySelector(".gallery").insertAdjacentHTML("beforeend", gallery)
+                        delPhoto()
 
-                        formPhoto.reset()
-                        imgPreview.src = ""
-                        imgPreview.style.display = "none"
-                        btnAddPhoto.style.display = null
-                        btnValider.style.background = "#A7A7A7"                        
+                        fieldsCheck()
+                        resetForm()                           
                     }
                 })
             })
