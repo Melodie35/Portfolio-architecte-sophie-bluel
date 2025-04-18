@@ -185,8 +185,8 @@ formPhoto.addEventListener("submit", (event) => {
     const image = event.target.querySelector("#plus-add-photo").files[0]
     const title = event.target.querySelector("#title").value
     const category = event.target.querySelector("#category").value
-
-    // const imgPreview = preview.querySelector("img")
+   
+    //Message d'erreur si tous les champs ne sont pas remplis
     const errorMessage = document.querySelector("#error-message")
     errorMessage.style.display = "none"
     
@@ -194,9 +194,9 @@ formPhoto.addEventListener("submit", (event) => {
         errorMessage.style.display = "block"
     } 
     
+    //Envoyer l'image à l'API et dans le DOM
     else {
         errorMessage.style.display = "none"
-        btnValider.style.background = "#1D6154"
         const formData = new FormData()
         formData.append("image", image)
         formData.append("title", title)

@@ -1,13 +1,4 @@
-/**
- * Récupérer dynamiquement les données des travaux via l’API :
- *  1) Récupérer les travaux de la gallerie en appelant l'API works avec fetch()
- *  2) Variable gallery : construire l'HTML en reprenant ce qui avait dans index.html
- *  3) Injecter l'HTML dans le DOM :
- *      a) pointer sur l'élément .gallery
- *      b) injecter dans le DOM
- * Constante start pour récupérer les travaux lorsque le DOM est chargé
- */
-
+//Récupérer dynamiquement les données des travaux via l’API
 const start = () => {
     fetch("http://localhost:5678/api/works")
         .then((response) => response.json())
@@ -28,26 +19,14 @@ const start = () => {
         })
 }
 
+//Récupérer les travaux une fois le DOM chargé
 window.addEventListener("load", start)
 
-/**
- * Ajouter le tri des projets par catégorie dans la galerie :
- *  1) Récupérer les catégories via l'API categories avec fetch()
- *  2) Créer les boutons à injecter dans le DOM :
- *      a) construire le bouton Tous (variable btnTous)
- *      b) créer les autres catéories dynamiquement (btnCategory)
- *      c) pointer sur l'élément .filter
- *      d) injecter dans le DOM
- *  3) Pour filtrer les catégories au click :
- *      a) sur chacun des boutons, ajouter un évènement d'écoute au clic
- *      b) pointer sur les éléments à filtrer
- *      c) ajouter une structure conditionnelle :
- *          i) si la catégorie du bouton = 0 (bouton Tous), alors tous les travaux sont visibles
- *         ii) sinon, si la catégorie du bouton = la catégorie des travaux, les afficher et cacher les autres
- */
 
+//Ajouter le tri des projets par catégorie dans la galerie :
 const btnFilter = document.querySelector(".filter")
 
+    //Récupérer dynamiquement les catégories via l'API
 fetch("http://localhost:5678/api/categories")
     .then((response) => response.json())
     .then((data) => {
@@ -62,13 +41,17 @@ fetch("http://localhost:5678/api/categories")
         }
         btnFilter.insertAdjacentHTML("beforeend", btnTous + btnCategory)
 
+        //Filtrer les catégories au clic
         let btn = document.querySelectorAll(".btn")
+
         btn.forEach((btnClick) => {
             btnClick.addEventListener("click", (event) => {
                 let figData = document.querySelectorAll(".fig-data")
                 figData.forEach((item) => {
+                    // Filtre pour le bouton Tous (afficher tous les travaux)
                     if (event.target.dataset.cat == "0") {
                         item.style.display = "grid"
+                    // Filtre pour les autres catégories (cacher les travaux non filtrés)
                     } else {
                         if (item.dataset.fig == event.target.dataset.cat) {
                             item.style.display = "grid"
@@ -80,19 +63,16 @@ fetch("http://localhost:5678/api/categories")
             })
         })
     })
+
     .catch((err) => {
         console.log(err)
     })
 
 
-/** Page d'accueil après connexion
- * 1) Récupérer le token
- * 2) si token ok, afficher le bandeau noir "Mode édition"
- * 3) Afficher logout au lieu de login dans le menu
- * 4) Suppression des boutons filtres
- * 5) Ajout du bouton "modifier"
-*/
+//Page d'accueil après connexion :
+    //Récupérer le token
 let token = sessionStorage.getItem("token")
+    //Page d'accueil en mode Edition si token ok
 if (token != null) {
     document.querySelector("#mode-edition").style.display = "flex"
     document.querySelector("#nav-login").textContent = "logout"
@@ -100,7 +80,7 @@ if (token != null) {
     document.querySelector("#modifier").style.display = "inline-flex"
 }
 
-/*Déconnexion*/
+//Déconnexion
 document.querySelector("#nav-login").addEventListener("click", (e) => {
     if (document.querySelector("#nav-login").textContent === "logout"){
         token = null
