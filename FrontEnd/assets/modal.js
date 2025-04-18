@@ -172,9 +172,9 @@ const resetForm = () => {
     if (imgPreview) {
         imgPreview.remove()
         imgPreview = null
-        input.value = ""
-        
+        input.value = ""        
     }
+    btnValider.style.background = "#A7A7A7"
 }
 resetForm()
 
