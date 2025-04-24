@@ -156,6 +156,7 @@ const imageForm = document.querySelector("#plus-add-photo")
 const titleForm = document.querySelector("#title")
 const categoryForm = document.querySelector("#category")
 const btnValider = document.querySelector("#btn-valider")
+const errorMessage = document.querySelector("#error-message")
 
 //Fonction pour valider les champs du formulaire
 const fieldsCheck = () => {
@@ -172,9 +173,10 @@ const resetForm = () => {
     if (imgPreview) {
         imgPreview.remove()
         imgPreview = null
-        input.value = ""        
+        input.value = ""       
     }
     btnValider.style.background = "#A7A7A7"
+    errorMessage.style.display = "none"
 }
 resetForm()
 
@@ -187,7 +189,6 @@ formPhoto.addEventListener("submit", (event) => {
     const category = event.target.querySelector("#category").value
    
     //Message d'erreur si tous les champs ne sont pas remplis
-    const errorMessage = document.querySelector("#error-message")
     errorMessage.style.display = "none"
     
     if (!image || !title || category === "blank") {
